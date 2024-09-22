@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações sobre Doenças e Hospitais</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        button, input {
+            margin: 10px;
+            padding: 10px;
+        }
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #hospitalList {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Informações sobre Doenças e Hospitais</h1>
+</header>
+
+<main>
+    <h2>Digite o nome da doença:</h2>
+    <input type="text" id="diseaseInput" placeholder="Ex: Diabetes">
+    <button onclick="getDiseaseInfo()">Buscar Doença</button>
+    <button onclick="showDiseases()">Mostrar Todas as Doenças</button>
+
+    <h2>Digite o nome da cidade:</h2>
+    <input type="text" id="cityInput" placeholder="Ex: São Paulo">
+    <button onclick="getHospitals()">Buscar Hospitais</button>
+    <button onclick="showCities()">Mostrar Todas as Cidades</button>
+    <button onclick="showHospitals()">Mostrar Lista de Hospitais</button>
+
+    <div id="info"></div>
+    <div id="hospitals"></div>
+    
+    <div id="diseaseList" style="margin-top: 20px;"></div>
+    <div id="cityList" style="margin-top: 20px;"></div>
+
+    <div id="hospitalList">
+        <h2>Hospitais Públicos e Privados</h2>
+        <h3>São Paulo</h3>
+        <ul>
+            <li>Hospital das Clínicas: Av. Dr. Arnaldo, 455</li>
+            <li>Hospital São Paulo: Av. Dr. Eneias de Carvalho Aguiar, 255</li>
+            <li>Hospital do Coração: Rua Abílio Soares, 74</li>
+        </ul>
+        <h3>Campinas</h3>
+        <ul>
+            <li>Hospital de Clínicas: Av. Dr. Heitor Penteado, 1234</li>
+            <li>Hospital de Câncer de Campinas: Av. Dr. Jorge Sampaio, 123</li>
+            <li>Hospital Samaritano: Av. José de Souza Campos, 123</li>
+        </ul>
+        <h3>São Bernardo do Campo</h3>
+        <ul>
+            <li>Hospital Universitário São Bernardo: Rua Carlos Gomes, 123</li>
+            <li>Hospital de Emergência de São Bernardo: Av. Senador Vergueiro, 123</li>
+            <li>Hospital Municipal de São Bernardo: Rua do Trabalho, 456</li>
+        </ul>
+        <h3>Rio Claro</h3>
+        <ul>
+            <li>Hospital e Maternidade São Lucas: Rua 8, 300</li>
+            <li>Hospital de Câncer de Rio Claro: Av. 5, 1234</li>
+            <li>Hospital Municipal de Rio Claro: Rua 5, 456</li>
+        </ul>
+        <h3>Sorocaba</h3>
+        <ul>
+            <li>Hospital de Emergência de Sorocaba: Av. Dr. Dório Silva, 100</li>
+            <li>Hospital Santa Lucinda: Rua Santa Lucinda, 10</li>
+            <li>Hospital Samaritano: Av. Ipanema, 200</li>
+        </ul>
+        <h3>Ribeirão Preto</h3>
+        <ul>
+            <li>Hospital das Clínicas: Av. dos Bandeirantes, 3900</li>
+            <li>Hospital de Câncer: Av. Caramuru, 100</li>
+            <li>Hospital São Paulo: Rua São Paulo, 250</li>
+        </ul>
+        <h3>São José dos Campos</h3>
+        <ul>
+            <li>Hospital Regional: Av. Jorge Zarur, 500</li>
+            <li>Hospital e Maternidade Lavoisier: Rua Lavoisier, 50</li>
+            <li>Hospital Municipal: Av. São José, 200</li>
+        </ul>
+        <h3>Diadema</h3>
+        <ul>
+            <li>Hospital Municipal de Diadema: Av. Alda, 999</li>
+            <li>Hospital de Câncer: Rua São Bento, 123</li>
+            <li>Hospital Santa Maria: Av. São Paulo, 456</li>
+        </ul>
+        <h3>Osasco</h3>
+        <ul>
+            <li>Hospital Antônio Giglio: Rua Gilda, 45</li>
+            <li>Hospital de Câncer: Av. dos Autonomistas, 1000</li>
+            <li>Hospital Municipal: Rua dos Três Irmãos, 333</li>
+        </ul>
+        <h3>Mauá</h3>
+        <ul>
+            <li>Hospital de Emergência de Mauá: Rua Siqueira Campos, 400</li>
+            <li>Hospital Municipal de Mauá: Av. Barão de Mauá, 250</li>
+            <li>Hospital de Câncer de Mauá: Rua da Liberdade, 100</li>
+        </ul>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 Informações sobre Doenças e Hospitais</p>
+</footer>
+
+<script>
+    const diseases = {
+        "Diabetes": {
+            "descricao": "Uma doença crônica que afeta a forma como o corpo processa o açúcar no sangue.",
+            "sintomas": ["Sede excessiva", "Urinar com frequência", "Fadiga"],
+            "tratamento": "Insulina, dieta e exercícios.",
+            "duracao": "Duração crônica, pode durar a vida toda sem tratamento adequado."
+        },
+        "Câncer": {
+            "descricao": "Um grupo de doenças caracterizadas pelo crescimento descontrolado de células anormais.",
+            "sintomas": ["Perda de peso inexplicada", "Fadiga", "Dor persistente"],
+            "tratamento": "Cirurgia, quimioterapia, radioterapia.",
+            "duracao": "Duração variável dependendo do tipo e estágio do câncer."
+        },
+        "Hipertensão": {
+            "descricao": "Uma condição crônica que afeta a pressão arterial.",
+            "sintomas": ["Dor de cabeça", "Fadiga", "Dificuldade de visão"],
+            "tratamento": "Medicamentos, dieta balanceada, exercícios.",
+            "duracao": "Duração crônica, requer gerenciamento contínuo."
+        },
+        "Asma": {
+            "descricao": "Uma doença respiratória que causa dificuldades respiratórias.",
+            "sintomas": ["Chiado", "Falta de ar", "Tosse"],
+            "tratamento": "Inaladores, medicamentos anti-inflamatórios.",
+            "duracao": "Duração crônica, pode ser controlada com tratamento adequado."
+        },
+        "Gripe": {
+            "descricao": "Uma infecção viral que afeta o sistema respiratório.",
+            "sintomas": ["Febre", "Tosse", "Dores no corpo"],
+            "tratamento": "Repouso, hidratação, medicamentos para aliviar sintomas.",
+            "duracao": "Normalmente dura de 5 a 7 dias."
+        },
+        "Artrite": {
+            "descricao": "Inflamação das articulações, causando dor e rigidez.",
+            "sintomas": ["Dor nas articulações", "Inchaço", "Rigidez"],
+            "tratamento": "Medicamentos anti-inflamatórios, fisioterapia.",
+            "duracao": "Pode ser crônica ou aguda."
+        },
+        "Depressão": {
+            "descricao": "Transtorno de humor que causa sentimentos persistentes de tristeza.",
+            "sintomas": ["Tristeza", "Fadiga", "Alterações no sono"],
+            "tratamento": "Terapia, medicamentos antidepressivos.",
+            "duracao": "Pode variar de episódios agudos a crônicos."
+        },
+        "Ansiedade": {
+            "descricao": "Transtorno caracterizado por sentimentos intensos de preocupação.",
+            "sintomas": ["Nervosismo", "Aceleração do coração", "Tensão muscular"],
+            "tratamento": "Terapia, medicamentos ansiolíticos.",
+            "duracao": "Pode ser episódica ou crônica."
+        },
+        "Infecção Urinária": {
+            "descricao": "Infecção que afeta o trato urinário.",
+            "sintomas": ["Queimação ao urinar", "Urina turva", "Frequente vontade de urinar"],
+            "tratamento": "Antibióticos.",
+            "duracao": "Normalmente tratada em poucos dias com antibióticos."
+        },
+        "Covid-19": {
+            "descricao": "Doença causada pelo coronavírus SARS-CoV-2, afetando principalmente o sistema respiratório.",
+            "sintomas": ["Febre", "Tosse seca", "Dificuldade para respirar"],
+            "tratamento": "Repouso, hidratação, e tratamento sintomático. Casos graves requerem hospitalização.",
+            "duracao": "Os sintomas podem durar de dias a semanas, dependendo da gravidade."
+        },
+        "Hepatite": {
+            "descricao": "Inflamação do fígado, geralmente causada por vírus, álcool ou drogas.",
+            "sintomas": ["Icterícia", "Dor abdominal", "Fadiga"],
+            "tratamento": "Varía conforme o tipo, pode incluir repouso e medicamentos.",
+            "duracao": "Pode ser aguda ou crônica, dependendo da causa."
+        },
+    };
+
+    const cities = [
+        "São Paulo", "Campinas", "São Bernardo do Campo", "Rio Claro", 
+        "Sorocaba", "Ribeirão Preto", "São José dos Campos", "Diadema", 
+        "Osasco", "Mauá"
+    ];
+
+    const hospitals = {
+        "São Paulo": [
+            { "nome": "Hospital das Clínicas", "endereco": "Av. Dr. Arnaldo, 455" },
+            { "nome": "Hospital São Paulo", "endereco": "Av. Dr. Eneias de Carvalho Aguiar, 255" },
+            { "nome": "Hospital do Coração", "endereco": "Rua Abílio Soares, 74" }
+        ],
+        // Adicione mais hospitais para outras cidades conforme necessário...
+    };
+
+    function getDiseaseInfo() {
+        const input = document.getElementById("diseaseInput").value.trim();
+        const infoDiv = document.getElementById("info");
+
+        if (diseases[input]) {
+            const disease = diseases[input];
+            infoDiv.innerHTML = `
+                <h3>${input}</h3>
+                <p><strong>Descrição:</strong> ${disease.descricao}</p>
+                <p><strong>Sintomas:</strong> ${disease.sintomas.join(", ")}</p>
+                <p><strong>Tratamento:</strong> ${disease.tratamento}</p>
+                <p><strong>Duração:</strong> ${disease.duracao}</p>
+            `;
+        } else {
+            infoDiv.innerHTML = `<p>Doença não encontrada. Tente novamente.</p>`;
+        }
+    }
+
+    function showDiseases() {
+        const diseaseListDiv = document.getElementById("diseaseList");
+        diseaseListDiv.innerHTML = "<h3>Doenças Disponíveis:</h3><ul>";
+        for (const disease in diseases) {
+            diseaseListDiv.innerHTML += `<li>${disease}</li>`;
+        }
+        diseaseListDiv.innerHTML += "</ul>";
+    }
+
+    function getHospitals() {
+        const cityInput = document.getElementById("cityInput").value.trim();
+        const hospitalsDiv = document.getElementById("hospitals");
+        
+        const cityHospitals = hospitals[cityInput];
+        if (cityHospitals) {
+            hospitalsDiv.innerHTML = `<h3>Hospitais em ${cityInput}:</h3><ul>`;
+            cityHospitals.forEach(hospital => {
+                hospitalsDiv.innerHTML += `<li>${hospital.nome}: ${hospital.endereco}</li>`;
+            });
+            hospitalsDiv.innerHTML += "</ul>";
+        } else {
+            hospitalsDiv.innerHTML = `<p>Cidade não encontrada. Tente novamente.</p>`;
+        }
+    }
+
+    function showCities() {
+        const cityListDiv = document.getElementById("cityList");
+        cityListDiv.innerHTML = "<h3>Cidades Disponíveis:</h3><ul>";
+        cities.forEach(city => {
+            cityListDiv.innerHTML += `<li>${city}</li>`;
+        });
+        cityListDiv.innerHTML += "</ul>";
+    }
+
+    function showHospitals() {
+        const hospitalListDiv = document.getElementById("hospitalList");
+        hospitalListDiv.style.display = "block";
+    }
+</script>
+
+</body>
+</html>
